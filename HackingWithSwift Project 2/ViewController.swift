@@ -29,6 +29,14 @@ class ViewController: UIViewController {
         let buttonIndex = buttons.firstIndex(of: sender)!
         if answerChecker.checkAnswer(from: threeRandomFlags[buttonIndex], with: title!) == true {
             score += 1
+            if score > 0, score % 10 == 0 {
+                let alertController = UIAlertController(title: "Congratz!", message: "You have scored \(score) points", preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "Continue", style: .cancel))
+                alertController.addAction(UIAlertAction(title: "New Game", style: .default) {_ in
+                    self.updateView(with: 0)
+                })
+                present(alertController, animated: true)
+            }
             updateView(with: score)
         } else {
             score -= 1
@@ -44,14 +52,8 @@ class ViewController: UIViewController {
     }
     
     func updateView(with score: Int) {
-        if score > 0, score % 10 == 0 {
-            let alertController = UIAlertController(title: "Congratz!", message: "You have scored \(score) points", preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: "Continue", style: .cancel))
-            present(alertController, animated: true)
-        }
-        
         threeRandomFlags = flagGenerator.getThreeFlags()
-        self.title = flagTitleFormer.formTitle(for: threeRandomFlags.randomElement()!) + " " + String(self.score)
+        self.title = flagTitleFormer.formTitle(for: threeRandomFlags.randomElement()!) + " " + String(score)
         updateButtons(with: buttons, and: threeRandomFlags)
     }
     
